@@ -14768,7 +14768,10 @@ class Home extends _react.Component {
       posts: [],
       loading: true
     };
+
+    this.handleScroll = this.handleScroll.bind(this);
   }
+
   componentDidMount() {
     var _this = this;
 
@@ -14780,8 +14783,46 @@ class Home extends _react.Component {
         page: _this.state.page + 1,
         loading: false
       });
+
+      window.addEventListener('scroll', _this.handleScroll);
     })();
   }
+
+  handleScroll(ev) {
+    var _this2 = this;
+
+    // Si ya se estan cargando posts, se sale, para evitar tener multiples requests activos
+    if (this.state.loading) return null;
+
+    const scrolled = window.scrollY; // Cuanto scrolleo el usuario
+    const viewportHeight = window.innerHeight; // Cuanto puede scrollear el usuario en total
+    const fullHeight = document.body.clientHeight; // Cuanto mide la ventana
+
+    // Si el usuario esta en los ultimos 300 pixeles de la pagina, se carga otra pagina mas de posts
+    if (!(scrolled + viewportHeight + 300 >= fullHeight)) return null;
+
+    this.setState({ loading: true }, _asyncToGenerator(function* () {
+      try {
+        const posts = yield _api2.default.posts.getList(_this2.state.page);
+        _this2.setState({
+          // Concat devuelve el array de posts original + los nuevos posts
+          posts: _this2.state.posts.concat(posts),
+          page: _this2.state.page + 1,
+          loading: false
+        });
+      } catch (err) {
+        console.error(err);
+        _this2.setState({
+          loading: false
+        });
+      }
+    }));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
   render() {
 
     return _react2.default.createElement(
@@ -14795,8 +14836,8 @@ class Home extends _react.Component {
       _react2.default.createElement(
         'section',
         null,
-        this.state.loading && _react2.default.createElement(_Loading2.default, null),
-        this.state.posts.map(post => _react2.default.createElement(_Post2.default, _extends({ key: post.id }, post)))
+        this.state.posts.map(post => _react2.default.createElement(_Post2.default, _extends({ key: post.id }, post))),
+        this.state.loading && _react2.default.createElement(_Loading2.default, null)
       )
     );
   }
