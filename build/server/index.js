@@ -14872,6 +14872,10 @@ var _Loading = __webpack_require__(263);
 
 var _Loading2 = _interopRequireDefault(_Loading);
 
+var _Comment = __webpack_require__(264);
+
+var _Comment2 = _interopRequireDefault(_Comment);
+
 var _api = __webpack_require__(37);
 
 var _api2 = _interopRequireDefault(_api);
@@ -14915,12 +14919,21 @@ class Post extends _react.Component {
       return _react2.default.createElement(_Loading2.default, null);
     } else {
       return _react2.default.createElement(
-        'section',
-        { name: 'post' },
-        _react2.default.createElement(_Post2.default, _extends({}, this.state.post, {
-          user: this.state.user,
-          comments: this.state.comments
-        }))
+        'div',
+        null,
+        _react2.default.createElement(
+          'section',
+          { name: 'post' },
+          _react2.default.createElement(_Post2.default, _extends({}, this.state.post, {
+            user: this.state.user,
+            comments: this.state.comments
+          }))
+        ),
+        _react2.default.createElement(
+          'section',
+          null,
+          this.state.comments.map(comment => _react2.default.createElement(_Comment2.default, _extends({ key: comment.id }, comment)))
+        )
       );
     }
   }
@@ -37020,6 +37033,47 @@ function Loading() {
 }
 
 exports.default = Loading;
+
+/***/ }),
+/* 264 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Comment(props) {
+  return _react2.default.createElement(
+    'article',
+    { id: `comment-${props.id}` },
+    _react2.default.createElement(
+      'div',
+      null,
+      'By: ',
+      _react2.default.createElement(
+        'a',
+        { href: `mailto:${props.email}` },
+        props.name
+      )
+    ),
+    _react2.default.createElement(
+      'p',
+      null,
+      props.body
+    )
+  );
+}
+
+exports.default = Comment;
 
 /***/ })
 /******/ ]);
