@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js"
+    "build": "webpack",
+    "start-server": "node build/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,12 @@
   "dependencies": {
     "react": "15.5.4",
     "react-dom": "15.5.4"
+  },
+  "devDependencies": {
+    "babel-core": "6.24.1",
+    "babel-loader": "7.0.0",
+    "babel-preset-latest-minimal": "1.1.2",
+    "babel-preset-react": "6.24.1",
+    "webpack": "2.4.1"
   }
 }
