@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack -w",
     "sfs": "serve build/static --port 3001 --cache 0",
-    "bff": "npm run sfs & node build/server/index.js"
+    "bff": "node build/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Gabrielnz/platzi-blog#readme",
   "dependencies": {
     "isomorphic-fetch": "2.2.1",
+    "prop-types": "15.5.8",
     "react": "15.5.4",
     "react-dom": "15.5.4",
     "react-router-dom": "4.1.1"
