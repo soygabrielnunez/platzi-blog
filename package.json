@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack -w",
     "start-server": "node build/server/index.js"
   },
   "repository": {
@@ -20,7 +20,8 @@
   "homepage": "https://github.com/Gabrielnz/platzi-blog#readme",
   "dependencies": {
     "react": "15.5.4",
-    "react-dom": "15.5.4"
+    "react-dom": "15.5.4",
+    "react-router-dom": "4.1.1"
   },
   "devDependencies": {
     "babel-core": "6.24.1",

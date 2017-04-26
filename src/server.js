@@ -1,16 +1,32 @@
 import http from 'http'
 import React from 'react'
-// renderToString renderiza la aplicacion a un string con el HTML
 import { renderToString } from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom'
 
-function requestHandler(req, res) {
-  const html = renderToString(
-    // el primer parametro que espera es props, y por los momentos no vamos a pasarle props
-    React.DOM.h1(null, 'hola')
+import Pages from './pages/containers/Page.jsx'
+
+function requestHandler(request, response){
+  const context = {}
+
+  let html = renderToString(
+    <StaticRouter
+      location={request.url}
+      context={context}>
+      <Pages />
+    </StaticRouter>
   )
 
-  res.write(html)
-  res.end
+  response.setHeader('Content-Type', 'text/html')
+
+  if (context.url) {
+    response.writeHead(301, {
+      Location: context.url,
+    })
+    response.end()
+  }
+
+  response.write(html)
+  response.end()
 }
 
 const server = http.createServer(requestHandler)
