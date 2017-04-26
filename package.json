@@ -1,0 +1,24 @@
+{
+  "name": "platzi-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabrielnz/platzi-blog.git"
+  },
+  "keywords": [],
+  "author": "Gabriel Nunez <gabriel.nzn@gmail.com> (https://github.com/gabrielnz)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gabrielnz/platzi-blog/issues"
+  },
+  "homepage": "https://github.com/Gabrielnz/platzi-blog#readme",
+  "dependencies": {
+    "react": "15.5.4",
+    "react-dom": "15.5.4"
+  }
+}
