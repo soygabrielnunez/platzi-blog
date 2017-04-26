@@ -10,34 +10,42 @@ class Post extends Component {
     this.state = {
       loading: true,
       user: props.user || null,
-      comments: []
+      comments: props.comments || null
     }
   }
 
   async componentDidMount() {
+    // Si los datos del usuario y de los comentarios ya existen, termina la ejecucion de esta funcion
+    if (!!this.state.user && !!this.state.comments) return this.setState({loading: false})
+
     const [
       user,
       comments
     ] = await Promise.all([
       // Si la informacion del usuario ya existe, devuelve una promesa resuelta inmediatamente
       !this.state.user ? api.users.getSingle(this.props.userId) : Promise.resolve(null),
-      api.posts.getComments(this.props.id)
+      // Si la informacion de los comentarios ya existe, devuelve una promesa resuelta inmediatamente
+      !this.state.comments ? api.posts.getComments(this.props.id) : Promise.resolve(null)
     ])
 
     this.setState({
       loading: false,
       user: user || this.state.user,
-      comments
+      comments: comments || this.state.comments
     })
   }
 
   render() {
     return (
       <article id={`post-${this.props.id}`}>
-        <h2>{this.props.title}</h2>
+        <Link to={`/post/${this.props.id}`}>
+          <h2>{this.props.title}</h2>
+        </Link>
+
         <p>
           {this.props.body}
         </p>
+        
         {!this.state.loading && (
           <div>
             <Link to={`/user/${this.state.user.id}`}>

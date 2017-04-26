@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 import Post from '../../posts/containers/Post.jsx'
+import Loading from '../../shared/components/Loading.jsx'
 
 import api from '../../api.js'
 
@@ -25,13 +26,14 @@ class Home extends Component {
     })
   }
   render() {
+
     return (
       <section name='home'>
         <h1>Home</h1>
         <section>
           {/* Si el estado loading es true, muestra el h2 */}
             {this.state.loading && (
-              <h2>Loading posts...</h2>
+              <Loading />
             )}
             {this.state.posts
               .map(post => <Post key={post.id} {...post} />)}
