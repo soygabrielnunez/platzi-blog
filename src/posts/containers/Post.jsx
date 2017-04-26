@@ -1,4 +1,5 @@
 import React, { Component} from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import api from '../../api.js'
 
@@ -8,7 +9,7 @@ class Post extends Component {
 
     this.state = {
       loading: true,
-      user: {},
+      user: props.user || null,
       comments: []
     }
   }
@@ -18,13 +19,14 @@ class Post extends Component {
       user,
       comments
     ] = await Promise.all([
-      api.users.getSingle(this.props.userId),
+      // Si la informacion del usuario ya existe, devuelve una promesa resuelta inmediatamente
+      !this.state.user ? api.users.getSingle(this.props.userId) : Promise.resolve(null),
       api.posts.getComments(this.props.id)
     ])
 
     this.setState({
       loading: false,
-      user,
+      user: user || this.state.user,
       comments
     })
   }
@@ -38,13 +40,12 @@ class Post extends Component {
         </p>
         {!this.state.loading && (
           <div>
-          {/* Aqui no manejamos Link de react-router, porque este es un enlace externo a la aplicacion */}
-          <a href={`//${this.state.user.website}`} target='_blank' rel='nofollow'>
-            {this.state.user.name}
-          </a>
-          <span>
-            Hay {this.state.comments.length} comentarios
-          </span>
+            <Link to={`/user/${this.state.user.id}`}>
+              {this.state.user.name}
+            </Link>
+            <span>
+              Hay {this.state.comments.length} comentarios
+            </span>
           </div>
         )}
       </article>
@@ -54,9 +55,16 @@ class Post extends Component {
 // Los tipos de datos que espera recibir el componente por props
 Post.PropTypes = {
   id: PropTypes.number,
-  userId: PropTypes.string,
+  userId: PropTypes.number,
   title: PropTypes.string,
-  body: PropTypes.string
+  body: PropTypes.string,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  }),
+  comments: PropTypes.arrayOf(
+    PropTypes.object,
+  )
 }
 
 export default Post
