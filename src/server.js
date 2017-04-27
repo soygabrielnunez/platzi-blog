@@ -29,7 +29,7 @@ function requestHandler(request, response){
   response.write(
     renderToStaticMarkup(
       <Layout
-        title='Aplicacion'
+        title='React blog'
         content={html}
       />
     )
