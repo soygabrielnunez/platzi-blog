@@ -1,4 +1,8 @@
-.s5Rd8w-kcIGOg6JN0lzuT {
+._1p5lzemUTXj1VQOh9iOVCB {
+  border-bottom: 1px solid black;
+  font-size: 1.25rem;
+  padding: 0 .5em .25em;
+}.s5Rd8w-kcIGOg6JN0lzuT {
   border-radius: .5em;
   box-shadow: 0 0 .5em black;
   padding: 1em;
@@ -30,6 +34,11 @@
     margin: .25em 0;
   }
 }
+body {
+  margin: 0;
+  padding: 0;
+}
+
 ._27gZpbl1Lfj8vgnPXps0Jn {
   max-width: 1024px;
   margin: 0 auto;

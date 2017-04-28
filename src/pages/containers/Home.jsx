@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 
+import Title from '../../shared/components/Title';
 import Post from '../../posts/containers/Post';
 import Loading from '../../shared/components/Loading';
 
@@ -71,6 +73,9 @@ class Home extends Component {
   render() {
     return (
       <section name="home" className={styles.section}>
+        <Title>
+          <FormattedMessage id="title.home" />
+        </Title>
         <section className={styles.list}>
           {this.state.posts
             .map(post => <Post key={post.id} {...post} />)}
