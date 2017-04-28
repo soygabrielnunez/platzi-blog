@@ -1,40 +1,46 @@
-import React, { Component} from 'react'
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import api from '../../api.js'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import api from '../../api';
 
-import styles from './Post.css'
+import styles from './Post.css';
 
 class Post extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       loading: true,
       user: props.user || null,
-      comments: props.comments || null
-    }
+      comments: props.comments || null,
+    };
   }
 
-  async componentDidMount() {
-    // Si los datos del usuario y de los comentarios ya existen, termina la ejecucion de esta funcion
-    if (!!this.state.user && !!this.state.comments) return this.setState({loading: false})
+  componentDidMount() {
+    this.initialFetch();
+  }
+
+  async initialFetch() {
+    // Si los datos del usuario y de los comentarios ya existen, termina
+    // la ejecucion de esta funcion
+    if (!!this.state.user && !!this.state.comments) return this.setState({ loading: false });
 
     const [
       user,
-      comments
+      comments,
     ] = await Promise.all([
       // Si la informacion del usuario ya existe, devuelve una promesa resuelta inmediatamente
       !this.state.user ? api.users.getSingle(this.props.userId) : Promise.resolve(null),
-      // Si la informacion de los comentarios ya existe, devuelve una promesa resuelta inmediatamente
-      !this.state.comments ? api.posts.getComments(this.props.id) : Promise.resolve(null)
-    ])
+      // Si la informacion de los comentarios ya existe, devuelve una promesa
+      // resuelta inmediatamente
+      !this.state.comments ? api.posts.getComments(this.props.id) : Promise.resolve(null),
+    ]);
 
-    this.setState({
+    return this.setState({
       loading: false,
       user: user || this.state.user,
-      comments: comments || this.state.comments
-    })
+      comments: comments || this.state.comments,
+    });
   }
 
   render() {
@@ -62,11 +68,21 @@ class Post extends Component {
           </div>
         )}
       </article>
-    )
+    );
   }
 }
+
+Post.defaultProps = {
+  id: null,
+  userId: null,
+  title: null,
+  body: null,
+  comments: null,
+  user: null,
+};
+
 // Los tipos de datos que espera recibir el componente por props
-Post.PropTypes = {
+Post.propTypes = {
   id: PropTypes.number,
   userId: PropTypes.number,
   title: PropTypes.string,
@@ -77,7 +93,7 @@ Post.PropTypes = {
   }),
   comments: PropTypes.arrayOf(
     PropTypes.object,
-  )
-}
+  ),
+};
 
-export default Post
+export default Post;

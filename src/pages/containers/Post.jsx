@@ -1,67 +1,82 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import PostBody from '../../posts/containers/Post.jsx'
-import Loading from '../../shared/components/Loading.jsx'
-import Comment from '../../comments/components/Comment.jsx'
+import PostBody from '../../posts/containers/Post';
+import Loading from '../../shared/components/Loading';
+import Comment from '../../comments/components/Comment';
 
-import api from '../../api.js'
+import api from '../../api';
 
 class Post extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.state= {
+    this.state = {
       loading: true,
       user: {},
       post: {},
-      comments: []
-    }
+      comments: [],
+    };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.initialFetch();
+  }
+
+  async initialFetch() {
     const [
       post,
-      comments
+      comments,
     ] = await Promise.all([
       api.posts.getSingle(this.props.match.params.id),
-      api.posts.getComments(this.props.match.params.id)
-    ])
+      api.posts.getComments(this.props.match.params.id),
+    ]);
 
-    const user = await api.users.getSingle(post.userId)
+    const user = await api.users.getSingle(post.userId);
 
     this.setState({
       loading: false,
       post,
       user,
-      comments
-    })
+      comments,
+    });
   }
 
   render() {
-
-    if(this.state.loading) {
-      return <Loading />
-    } else {
-      return (
-        <div>
-          <section name='post'>
-            <PostBody
-              {...this.state.post}
-              user={this.state.user}
-              comments={this.state.comments}
-            />
-          </section>
-          <section>
-            {this.state.comments
-              .map(comment => (
-                <Comment key={comment.id} {...comment} />
-              ))}
-          </section>
-        </div>
-      )
+    if (this.state.loading) {
+      return <Loading />;
     }
+
+    return (
+      <div>
+        <section name="post">
+          <PostBody
+            {...this.state.post}
+            user={this.state.user}
+            comments={this.state.comments}
+          />
+        </section>
+        <section>
+          {this.state.comments
+            .map(comment => (
+              <Comment key={comment.id} {...comment} />
+            ))}
+        </section>
+      </div>
+    );
   }
 }
 
-export default Post
+Post.defaultProps = {
+  match: [],
+};
+
+Post.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
+};
+
+export default Post;

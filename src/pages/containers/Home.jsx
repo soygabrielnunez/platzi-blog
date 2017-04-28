@@ -1,75 +1,76 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react';
 
-import Post from '../../posts/containers/Post.jsx'
-import Loading from '../../shared/components/Loading.jsx'
+import Post from '../../posts/containers/Post';
+import Loading from '../../shared/components/Loading';
 
-import api from '../../api.js'
+import api from '../../api';
 
-import styles from './Page.css'
+import styles from './Page.css';
 
 class Home extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       page: 1,
       posts: [],
-      loading: true
-    }
+      loading: true,
+    };
 
-    this.handleScroll = this.handleScroll.bind(this)
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
-  async componentDidMount() {
-    const posts = await api.posts.getList(this.state.page)
+  componentDidMount() {
+    this.initialFetch();
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  async initialFetch() {
+    const posts = await api.posts.getList(this.state.page);
 
     this.setState({
       posts,
       page: this.state.page + 1,
-      loading: false
-    })
-
-    window.addEventListener('scroll', this.handleScroll)
+      loading: false,
+    });
   }
 
-  handleScroll(ev) {
+  handleScroll() {
     // Si ya se estan cargando posts, se sale, para evitar tener multiples requests activos
-    if (this.state.loading) return null
+    if (this.state.loading) return null;
 
-    const scrolled = window.scrollY // Cuanto scrolleo el usuario
-    const viewportHeight = window.innerHeight // Cuanto puede scrollear el usuario en total
-    const fullHeight = document.body.clientHeight // Cuanto mide la ventana
+    const scrolled = window.scrollY; // Cuanto scrolleo el usuario
+    const viewportHeight = window.innerHeight; // Cuanto puede scrollear el usuario en total
+    const fullHeight = document.body.clientHeight; // Cuanto mide la ventana
 
     // Si el usuario esta en los ultimos 300 pixeles de la pagina, se carga otra pagina mas de posts
-    if(!(scrolled + viewportHeight + 300 >= fullHeight)) return null
+    if (!(scrolled + viewportHeight + 300 >= fullHeight)) return null;
 
-    this.setState({ loading: true }, async () => {
+    return this.setState({ loading: true }, async () => {
       try {
-        const posts = await api.posts.getList(this.state.page)
+        const posts = await api.posts.getList(this.state.page);
         this.setState({
           // Concat devuelve el array de posts original + los nuevos posts
           posts: this.state.posts.concat(posts),
           page: this.state.page + 1,
-          loading: false
-        })
+          loading: false,
+        });
       } catch (err) {
-        console.error(err)
+        console.error(err);
         this.setState({
-          loading: false
-        })
+          loading: false,
+        });
       }
-    })
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll)
+    });
   }
 
   render() {
-
     return (
-      <section name='home' className={styles.section}>
+      <section name="home" className={styles.section}>
         <section className={styles.list}>
           {this.state.posts
             .map(post => <Post key={post.id} {...post} />)}
@@ -80,8 +81,8 @@ class Home extends Component {
           )}
         </section>
       </section>
-    )
+    );
   }
 }
 
-export default Home
+export default Home;

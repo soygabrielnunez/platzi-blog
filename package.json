@@ -24,10 +24,12 @@
     "prop-types": "15.5.8",
     "react": "15.5.4",
     "react-dom": "15.5.4",
-    "react-router-dom": "4.1.1"
+    "react-router-dom": "4.1.1",
+    "extract-text-webpack-plugin": "2.1.0"
   },
   "devDependencies": {
     "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
     "babel-loader": "7.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
     "babel-preset-es2016": "6.24.1",
@@ -35,7 +37,12 @@
     "babel-preset-latest-minimal": "1.1.2",
     "babel-preset-react": "6.24.1",
     "css-loader": "0.28.0",
-    "extract-text-webpack-plugin": "2.1.0",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "14.1.0",
+    "eslint-loader": "1.7.1",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "3.0.2",
+    "eslint-plugin-react": "6.10.3",
     "style-loader": "0.16.1",
     "webpack": "2.4.1"
   }
