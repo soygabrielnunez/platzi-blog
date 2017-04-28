@@ -17,7 +17,7 @@ function Layout(props) {
         />
         <link
           rel="stylesheet"
-          href="http://localhost:3001/styles.css"
+          href={`${props.domain}/styles.css`}
         />
       </head>
       <body>
@@ -27,7 +27,7 @@ function Layout(props) {
             __html: props.content,
           }}
         />
-        <script src="http://localhost:3001/app.js" />
+        <script src={`${props.domain}/app.js`} />
       </body>
     </html>
   );
@@ -36,6 +36,7 @@ function Layout(props) {
 Layout.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
+  domain: PropTypes.string.isRequired,
 };
 
 export default Layout;

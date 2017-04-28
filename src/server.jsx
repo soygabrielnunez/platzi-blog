@@ -9,6 +9,10 @@ import Layout from './pages/components/Layout';
 
 import messages from './messages.json';
 
+const domain = process.env.NODE_ENV === 'production'
+? 'https://gabrielnz-platzi-blog-sfs.now.sh/'
+: 'http://localhost:3001';
+
 function requestHandler(request, response) {
   const locale = request.headers['accept-language'].indexOf('es') >= 0 ? 'es' : 'en';
   const context = {};
@@ -38,6 +42,7 @@ function requestHandler(request, response) {
       <Layout
         title="React blog"
         content={html}
+        domain={domain}
       />,
     ),
   );
