@@ -39,7 +39,9 @@ const config = {
               plugins: ['transform-regenerator', 'transform-runtime'],
               presets: ['es2015'],
             },
-            development: ['latest-minimal'],
+            development: {
+              presets: ['latest-minimal'],
+            },
           },
         },
       },

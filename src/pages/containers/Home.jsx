@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 
 import Title from '../../shared/components/Title';
 import Post from '../../posts/containers/Post';
@@ -9,13 +11,13 @@ import api from '../../api';
 
 import styles from './Page.css';
 
+import actions from '../../actions';
+
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      page: 1,
-      posts: [],
       loading: true,
     };
 
@@ -32,13 +34,13 @@ class Home extends Component {
   }
 
   async initialFetch() {
-    const posts = await api.posts.getList(this.state.page);
+    const posts = await api.posts.getList(this.props.page);
 
-    this.setState({
-      posts,
-      page: this.state.page + 1,
-      loading: false,
-    });
+    this.props.dispatch(
+      actions.setPost(posts),
+    );
+
+    this.setState({ loading: false });
   }
 
   handleScroll() {
@@ -54,11 +56,13 @@ class Home extends Component {
 
     return this.setState({ loading: true }, async () => {
       try {
-        const posts = await api.posts.getList(this.state.page);
+        const posts = await api.posts.getList(this.props.page);
+
+        this.props.dispatch(
+          actions.setPost(posts),
+        );
+
         this.setState({
-          // Concat devuelve el array de posts original + los nuevos posts
-          posts: this.state.posts.concat(posts),
-          page: this.state.page + 1,
           loading: false,
         });
       } catch (err) {
@@ -77,7 +81,7 @@ class Home extends Component {
           <FormattedMessage id="title.home" />
         </Title>
         <section className={styles.list}>
-          {this.state.posts
+          {this.props.posts
             .map(post => <Post key={post.id} {...post} />)}
 
           {/* Si el estado loading es true, muestra el h2 */}
@@ -90,4 +94,25 @@ class Home extends Component {
   }
 }
 
-export default Home;
+Home.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+// Esta funcion nos permite obtener datos del estado actual e insertarlos como props a un componente
+function mapStateToProps(state) {
+  return {
+    posts: state.posts.entities,
+    page: state.posts.page,
+  };
+}
+
+// Esta funcion nos permite devolver un objeto con creadores de acciones
+//  que hagan el dispatch automatico
+/* function mapDispatchToProps(dispatch, props) {
+  return {
+
+  }
+}*/
+
+export default connect(mapStateToProps)(Home);
