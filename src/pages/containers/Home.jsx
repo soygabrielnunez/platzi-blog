@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import Title from '../../shared/components/Title';
 import Post from '../../posts/containers/Post';
@@ -34,12 +35,7 @@ class Home extends Component {
   }
 
   async initialFetch() {
-    const posts = await api.posts.getList(this.props.page);
-
-    this.props.dispatch(
-      actions.setPost(posts),
-    );
-
+    await this.props.actions.postsNextPage();
     this.setState({ loading: false });
   }
 
@@ -56,15 +52,8 @@ class Home extends Component {
 
     return this.setState({ loading: true }, async () => {
       try {
-        const posts = await api.posts.getList(this.props.page);
-
-        this.props.dispatch(
-          actions.setPost(posts),
-        );
-
-        this.setState({
-          loading: false,
-        });
+        await this.props.actions.postsNextPage();
+        this.setState({ loading: false });
       } catch (err) {
         console.error(err);
         this.setState({
@@ -95,7 +84,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  actions: PropTypes.objectOf(PropTypes.func).isRequired,
   posts: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
@@ -108,11 +97,11 @@ function mapStateToProps(state) {
 }
 
 // Esta funcion nos permite devolver un objeto con creadores de acciones
-//  que hagan el dispatch automatico
-/* function mapDispatchToProps(dispatch, props) {
+//  que hagan el dispatch automaticamente
+function mapDispatchToProps(dispatch) {
   return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+}
 
-  }
-}*/
-
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
