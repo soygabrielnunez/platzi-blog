@@ -8,8 +8,6 @@ import Title from '../../shared/components/Title';
 import Post from '../../posts/containers/Post';
 import Loading from '../../shared/components/Loading';
 
-import api from '../../api';
-
 import styles from './Page.css';
 
 import actions from '../../actions';

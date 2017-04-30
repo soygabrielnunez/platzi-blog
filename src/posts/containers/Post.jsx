@@ -2,19 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import api from '../../api';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import styles from './Post.css';
+
+import actions from '../../actions';
 
 class Post extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: true,
-      user: props.user || null,
-      comments: props.comments || null,
-    };
+    this.state = { loading: true };
   }
 
   componentDidMount() {
@@ -24,24 +23,14 @@ class Post extends Component {
   async initialFetch() {
     // Si los datos del usuario y de los comentarios ya existen, termina
     // la ejecucion de esta funcion
-    if (!!this.state.user && !!this.state.comments) return this.setState({ loading: false });
+    if (!!this.props.user && !!this.props.comments) return this.setState({ loading: false });
 
-    const [
-      user,
-      comments,
-    ] = await Promise.all([
-      // Si la informacion del usuario ya existe, devuelve una promesa resuelta inmediatamente
-      !this.state.user ? api.users.getSingle(this.props.userId) : Promise.resolve(null),
-      // Si la informacion de los comentarios ya existe, devuelve una promesa
-      // resuelta inmediatamente
-      !this.state.comments ? api.posts.getComments(this.props.id) : Promise.resolve(null),
+    await Promise.all([
+      this.props.actions.loadUser(this.props.userId),
+      this.props.actions.loadCommentsForPost(this.props.id),
     ]);
 
-    return this.setState({
-      loading: false,
-      user: user || this.state.user,
-      comments: comments || this.state.comments,
-    });
+    return this.setState({ loading: false });
   }
 
   render() {
@@ -60,13 +49,13 @@ class Post extends Component {
 
         {!this.state.loading && (
           <div className={styles.meta}>
-            <Link to={`/user/${this.state.user.id}`} className={styles.user}>
-              {this.state.user.name}
+            <Link to={`/user/${this.props.user.id}`} className={styles.user}>
+              {this.props.user.name}
             </Link>
             <span className={styles.comments}>
               <FormattedMessage
                 id="post.meta.comments"
-                values={{ amount: this.state.comments.length }}
+                values={{ amount: this.props.comments.length }}
               />
             </span>
             <Link to={`/post/${this.props.id}`}>
@@ -91,7 +80,6 @@ Post.defaultProps = {
 // Los tipos de datos que espera recibir el componente por props
 Post.propTypes = {
   id: PropTypes.number,
-  userId: PropTypes.number,
   title: PropTypes.string,
   body: PropTypes.string,
   user: PropTypes.shape({
@@ -103,4 +91,17 @@ Post.propTypes = {
   ),
 };
 
-export default Post;
+function mapStateToProps(state, props) {
+  return {
+    comments: state.comments.filter(comment => comment.postId === props.id),
+    user: state.users[props.userId],
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
