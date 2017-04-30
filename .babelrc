@@ -1,7 +1,7 @@
 {
 	"env": {
 		"test": {
-			"presets": ["latest-minimal"]
+			"presets": ["latest-minimal", "react"]
 		}
 	}
 }

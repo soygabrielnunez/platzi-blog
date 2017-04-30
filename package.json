@@ -12,7 +12,22 @@
     "deploy-sfs": "now ./build/static/",
     "start": "npm run bff",
     "test": "jest",
+    "test-fix": "npm run test -- -u",
+    "test-coverage": "jest --coverage",
     "test-watch": "jest --watch"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "\\.(css)$": "/__mocks__/styleMock.js"
+    },
+    "notify": true
   },
   "repository": {
     "type": "git",
@@ -64,6 +79,7 @@
     "eslint-plugin-jsx-a11y": "3.0.2",
     "eslint-plugin-react": "6.10.3",
     "jest": "19.0.2",
+    "react-test-renderer": "15.5.4",
     "style-loader": "0.16.1"
   }
 }
