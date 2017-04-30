@@ -33,6 +33,8 @@ function requestHandler(request, response) {
     </Provider>,
   );
 
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   response.setHeader('Content-Type', 'text/html');
 
   if (context.url) {
