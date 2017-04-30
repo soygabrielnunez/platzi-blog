@@ -69,7 +69,9 @@ class Home extends Component {
         </Title>
         <section className={styles.list}>
           {this.props.posts
-            .map(post => <Post key={post.id} {...post} />)}
+            .map(post => <Post key={post.get('id')} {...post.toJS()} />)
+            .toArray()
+          }
 
           {/* Si el estado loading es true, muestra el h2 */}
           {this.state.loading && (
@@ -83,14 +85,13 @@ class Home extends Component {
 
 Home.propTypes = {
   actions: PropTypes.objectOf(PropTypes.func).isRequired,
-  posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  posts: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 // Esta funcion nos permite obtener datos del estado actual e insertarlos como props a un componente
 function mapStateToProps(state) {
   return {
-    posts: state.posts.entities,
-    page: state.posts.page,
+    posts: state.get('posts').get('entities'),
   };
 }
 
