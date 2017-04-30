@@ -10,7 +10,9 @@
     "watch": "webpack -w",
     "deploy": "now",
     "deploy-sfs": "now ./build/static/",
-    "start": "npm run bff"
+    "start": "npm run bff",
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,7 @@
   "devDependencies": {
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",
+    "babel-jest": "19.0.0",
     "babel-loader": "7.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
     "babel-plugin-transform-regenerator": "6.24.1",
@@ -60,6 +63,7 @@
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "3.0.2",
     "eslint-plugin-react": "6.10.3",
+    "jest": "19.0.2",
     "style-loader": "0.16.1"
   }
 }
