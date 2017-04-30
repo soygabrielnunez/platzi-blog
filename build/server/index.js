@@ -9287,6 +9287,8 @@ var _reduxThunk = __webpack_require__(203);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
+var _reduxDevtoolsExtension = __webpack_require__(218);
+
 var _reducer = __webpack_require__(99);
 
 var _reducer2 = _interopRequireDefault(_reducer);
@@ -9302,7 +9304,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 }*/
 
 // El store recibe el reducer, y el estado inicial o un enhancer
-const store = (0, _redux.createStore)(_reducer2.default, (0, _redux.applyMiddleware)(_reduxLogger2.default, _reduxThunk2.default));
+const store = (0, _redux.createStore)(_reducer2.default, (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxLogger2.default, _reduxThunk2.default)));
 
 exports.default = store;
 
@@ -27283,6 +27285,33 @@ exports.default = function (nextState, reducerName, action) {
 
 module.exports = exports['default'];
 //# sourceMappingURL=validateNextState.js.map
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var compose = __webpack_require__(31).compose;
+
+exports.__esModule = true;
+exports.composeWithDevTools = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    function() {
+      if (arguments.length === 0) return undefined;
+      if (typeof arguments[0] === 'object') return compose;
+      return compose.apply(null, arguments);
+    }
+);
+
+exports.devToolsEnhancer = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__ :
+    function() { return function(noop) { return noop; } }
+);
+
 
 /***/ })
 /******/ ]);
